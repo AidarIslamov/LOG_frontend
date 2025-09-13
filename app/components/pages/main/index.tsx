@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useRounds } from "@/lib/hooks/useRounds";
+import { useAuth } from "@/lib/providers/auth-provider";
 import type { Round, RoundUser } from "@/lib/types";
 import { Badge } from '@ui/badge';
 import { Check } from 'lucide-react';
@@ -9,15 +10,23 @@ import { Link, useNavigate } from "react-router";
 
 export function Main() {
   const { data: rounds } = useRounds();
+  const { user } = useAuth();
   let navigate = useNavigate();
 
   function handleClick(uid: string) {
     navigate(`/round/${uid}`)
-  }
+  } 
 
   return (
     <>
-      <Link to='/round' ><Button variant='success' className="cursor-pointer">Create</Button></Link>
+      <div>
+        {user?.role == 'admin' ? 
+          <Link to='/round'>
+            <Button variant='success' > Create </Button>
+          </Link>
+          : <Button variant='success' disabled={!(user?.role === 'admin')}> Create </Button>
+        }
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
