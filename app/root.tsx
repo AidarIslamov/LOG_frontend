@@ -2,7 +2,6 @@
 
 import {
   isRouteErrorResponse,
-  Link,
   Meta,
   Outlet,
   Scripts,
@@ -12,11 +11,8 @@ import {
 import "./app.css";
 import { QueryProvider } from "@lib/providers/query-provider";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { Card } from "@ui/card";
 import type { Route } from "./+types/root";
 import { AuthProvider } from "./lib/providers/auth-provider";
-
-
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();

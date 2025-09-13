@@ -1,5 +1,4 @@
 import { Round as RoundPage } from "@pages/round/index";
-import { CreateRound } from "@pages/round/create";
 import type { Route } from "./+types/round";
 
 export function meta({ }: Route.MetaArgs) {
@@ -9,9 +8,8 @@ export function meta({ }: Route.MetaArgs) {
     ];
 }
 
-export default function Round({ params }: { params: { uid?: string } }) {
+export default function Round({ params }: { params: { uid: string } }) {
     const { uid } = params
 
-    return uid ?
-        <RoundPage uid={uid} /> : <CreateRound />
+    return <RoundPage uid={uid} />
 }
