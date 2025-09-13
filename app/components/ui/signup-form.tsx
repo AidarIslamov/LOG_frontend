@@ -7,12 +7,12 @@ import { Link } from "react-router"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/form"
 import type { SignupFormData } from "@/lib/types"
 import { Checkbox } from "@ui/checkbox"
-import {AlertDialog,  AlertDialogAction,  AlertDialogContent,  AlertDialogFooter,  AlertDialogHeader,  AlertDialogTitle } from "./alert-dialog"
+import {AlertDialog,  AlertDialogAction,  AlertDialogContent,  AlertDialogFooter,  AlertDialogHeader,  AlertDialogTitle } from "@ui/alert-dialog"
 import { useState } from "react"
 import { useAuth } from "@/lib/providers/auth-provider"
 
 export function SignupForm() {
-  const auth = useAuth()
+  const {register} = useAuth()
   const form = useForm({
     resolver: zodResolver(signupFormSchema),
   });
@@ -20,9 +20,8 @@ export function SignupForm() {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   async function onSubmit(formData: SignupFormData) {
-    auth.register(formData)
     try {
-      await auth.register(formData)
+      await register(formData)
     } catch (error) {
       const apiError = error as { statusCode?: number; error?: string, message: string };
       if(apiError.statusCode === 409 && apiError.error === "Conflict") {
