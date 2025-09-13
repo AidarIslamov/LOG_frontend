@@ -9,7 +9,8 @@ export function roundsQueryOptions() {
             const { data }: { data: Round[] } = await api.get(`/round`);
             return data;
         },
-        refetchOnWindowFocus: true
+        refetchOnWindowFocus: true,
+        refetchInterval: 1500
     })
 }
 
