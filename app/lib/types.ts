@@ -1,5 +1,5 @@
 import type z from "zod/v3";
-import type { roundFormSchema, signupFormSchema } from "./validators";
+import type { loginFormSchema, roundFormSchema, signupFormSchema } from "./validators";
 
 export type Round = {
     id: string;
@@ -47,3 +47,4 @@ export type Dictionary = {
 
 export type RoundFormData = z.infer<typeof roundFormSchema>;
 export type SignupFormData = z.infer<typeof signupFormSchema>;
+export type LoginFormData = z.infer<typeof loginFormSchema>;

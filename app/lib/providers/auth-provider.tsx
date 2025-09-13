@@ -1,10 +1,10 @@
-import type { SignupFormData, User } from "../types";
+import type { LoginFormData, SignupFormData, User } from "../types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "@lib/api/client";
 
 interface AuthContextType {
   user: User | null;
-  login: (name: string, password: string) => Promise<void>;
+  login: (loginData: LoginFormData) => Promise<void>;
   register: (signupData: SignupFormData) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
@@ -33,8 +33,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (name: string, password: string) => {
-    const { data } = await api.post('/login', { name, password });
+  const login = async (loginData: LoginFormData) => {
+    const { data } = await api.post('/login', loginData);
     setUser(data.user);
   };
 
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    const { data } = await api.get('/logout');
+    api.get('/logout');
     setUser(null);
   };
 
