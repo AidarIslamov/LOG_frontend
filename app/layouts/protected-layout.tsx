@@ -23,7 +23,7 @@ export default function ProtectedLayout() {
                                 }
                             </div>
                             <DropdownMenu>
-                                <DropdownMenuTrigger className="underline">{user?.name}</DropdownMenuTrigger>
+                                <DropdownMenuTrigger className="underline cursor-pointer text-blue-700">{user?.name}</DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
                                 </DropdownMenuContent>
