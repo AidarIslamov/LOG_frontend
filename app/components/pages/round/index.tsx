@@ -36,7 +36,7 @@ export function Round({ uid }: { uid: string }) {
 
         scheduleRefetch(beforeStartSec, 'start');
         scheduleRefetch(beforeRunSec, 'run');
-        scheduleRefetch(beforeEnd, 'end');
+        scheduleRefetch(beforeEnd + 2, 'end');
 
         return () => {
             timers.forEach(timer => clearTimeout(timer));
