@@ -9,9 +9,12 @@ export type Round = {
     endAt: string;
     isActive: boolean;
     isInCoolDown: boolean;
+    isFinished: boolean;
     createdAt: string;
     updatedAt: string;
-    users: RoundUser[]
+    users: RoundUser[];
+    roundPlayers: RoundPlayer[];
+    totals?: RoundTotals; 
 }
 
 export type User = {
@@ -28,10 +31,17 @@ export type RoundPlayer = {
     user_id: User['id'];
     createdAt: string;
     updatedAt: string;
+    score: number;
+    user?: User
 }
 
 export type RoundUser = User & {
     RoundPlayer: RoundPlayer
+}
+
+export type RoundTotals = {
+    totalScore: number;
+    winner: {user: {name: string, score: number}}
 }
 
 export type Constants = {

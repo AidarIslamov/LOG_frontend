@@ -2,7 +2,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { api } from "../api/client";
 import type { Round, RoundFormData } from "../types";
 
-function roundQueryOptions({ uid }: { uid: string }) {
+function roundQueryOptions({ uid }: { uid: string, refetch?: boolean }) {
     return queryOptions({
         queryKey: ['round', uid],
         queryFn: async () => {
