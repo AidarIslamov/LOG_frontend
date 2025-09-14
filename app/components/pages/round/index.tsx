@@ -1,17 +1,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
-import { useRound } from "@/lib/hooks/useRound"
+import { sendRoundVote, useRound } from "@/lib/hooks/useRound"
 import type { Round, User } from "@/lib/types";
 import React, { useEffect, useMemo, useState } from "react";
 import { Navigate } from "react-router";
 import {differenceInSeconds} from 'date-fns';
 import { useAuth } from "@/lib/providers/auth-provider";
+import { cn } from "@/lib/utils";
 
 export function Round({ uid }: { uid: string }) {
     const {user: currentUser} = useAuth()
     const { data, isLoading, refetch, isFetching  } = useRound({ uid});
     const {round, message} = data ?? {};  
     const { start, run, end } = useRoundTimer(round);
+    const isClickable = useMemo(() => {
+        return run <= 0 && end > 0;
+    }, [run, end])
+
+
+    const [currentUserScore, setCurrentUserScore] = useState(0);
+
+    useEffect(() => {
+        const roundDataValue = round?.roundPlayers.find((roundPlayer) => roundPlayer.user_id === currentUser?.id)?.score || 0;
+        setCurrentUserScore((prev) => (Math.max(roundDataValue, prev)))
+    }, [round, isFetching])
 
 
     useEffect(() => {
@@ -63,10 +75,8 @@ export function Round({ uid }: { uid: string }) {
         } else if (end > 0) {
             content.push({text: 'Раунд активен!'})
             content.push({text: `До конца осталось: ${formatTime(end)}`})
-            const currentUserScore = round!.roundPlayers.find((roundPlayer) => roundPlayer.user_id === currentUser?.id)?.score || 0;
             content.push({text: `Мои очки - ${currentUserScore}`})
         } else {
-            const currentUserScore = round!.roundPlayers.find((roundPlayer) => roundPlayer.user_id === currentUser?.id)?.score || 0;
             return (
                 <div>
                     <Separator className="w-full my-3" />
@@ -89,22 +99,38 @@ export function Round({ uid }: { uid: string }) {
 
         return (
             <div className="flex flex-col justify-center">
-                {content.map((item) => <span className="mx-auto">{item.text}</span>)}
+                {content.map((item, idx) => <span key={idx} className="mx-auto">{item.text}</span>)}
             </div>
         )
     }
+
+    async function handleClick() {
+        if(isClickable) {
+            const {success, score, status} = await sendRoundVote(uid);
+            if(success) {
+                setCurrentUserScore((prev) => (Math.max(score || 0, prev)))
+            }
+
+            if(status === 'prevented') {
+                console.log('Tap prevented - Nikita mode activated');
+            }
+        }
+        
+    }
+
+
 
     return (
         <div className="flex justify-center ">
             <Card className="max-w-md px-5">
                 <CardHeader>
-                    <CardTitle className="mx-auto">
-                        Раунд: <span className="underline">{round.id}</span>
+                    <CardTitle className={"mx-auto"}>
+                        Раунд: <span className={cn("underline", isClickable ? 'text-green-500' : '')}>{round.id}</span>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex justify-center">
-                        <img src="/goose.jpg" alt="" />
+                    <div className={cn("flex justify-center ", isClickable ? 'cursor-pointer shadow-lg' : 'cursor-not-allowed')} onClick={handleClick}>
+                        <img src="/goose.jpg" alt="Goose" className={cn(!isClickable ? 'contrast-50' : '')}/>
                     </div>
                     <div className="my-10">
                         {currentState()}

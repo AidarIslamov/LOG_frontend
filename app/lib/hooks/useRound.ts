@@ -23,8 +23,7 @@ export async function createRound(data: RoundFormData) {
     return await api.post('/round', data)
 }
 
-
-
-// export async function sendRoundVote(uid: string) {
-//     return await api.post(`/round/${uid}/vote`);
-// }
+export async function sendRoundVote(uid: string): Promise<{success: boolean, score?: number, status?: string, error?: string}> {
+    const {data} =  await api.post(`/round/${uid}/vote`);
+    return data;
+}
