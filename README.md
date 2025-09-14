@@ -16,7 +16,16 @@ cp .env.example .env
 
 3. Заполните переменные в файле `.env`
 
-4. Запустите
+4. Сборка
+```bash
+npm run build
+```
+
+5. Запустите
 ```bash
 npm run start
 ```
+
+6. Откройте в браузере.
+
+http://localhost:3000/
